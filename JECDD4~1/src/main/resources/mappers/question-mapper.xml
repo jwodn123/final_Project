@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="questionMapper">
+	<resultMap type="Question" id="resultQuestion">
+		<id property="question_no" column="question_no" />
+		<result property="question_title" column="question_title" />
+		<result property="question_rcontent" column="question_rcontent" />	
+		<result property="question_content" column="question_content" />	
+		<result property="question_fimg" column="question_fimg" />	
+		<result property="question_rimg" column="question_rimg" />
+		<result property="question_sendemail" column="question_sendemail"/>	
+		<result property="user_id" column="user_id" />	
+		<result property="questiontype_no" column="questiontype_no" />	
+	</resultMap>
+	
+	<resultMap type="Question" id="resultList">
+		<id property="question_no" column="question_no" />
+		<result property="question_title" column="question_title" />
+		<result property="question_rcontent" column="question_rcontent" />	
+		<result property="question_content" column="question_content" />	
+		<result property="question_fimg" column="question_fimg" />	
+		<result property="question_rimg" column="question_rimg" />	
+		<result property="question_sendemail" column="question_sendemail"/>	
+		<result property="user_id" column="user_id" />	
+		<result property="questiontype_no" column="questiontype_no" />		
+	</resultMap>
+	
+	<resultMap type="com.jeju.JejuBnB.question.model.vo.Question_Type" id="QuestionDetail">
+		<id property="question_no" column="question_no" />
+		<result property="question_title" column="question_title" />
+		<result property="question_rcontent" column="question_rcontent" />	
+		<result property="question_content" column="question_content" />	
+		<result property="question_fimg" column="question_fimg" />	
+		<result property="question_rimg" column="question_rimg" />	
+		<result property="question_sendemail" column="question_sendemail"/>	
+		<result property="user_id" column="user_id" />	
+		<result property="questiontype_no" column="questiontype_no" />	
+		<result property="questiontype_name" column="questiontype_name" />
+		
+	</resultMap>
+	
+	<select id="selectList" resultMap="resultList">
+		select * from question
+	</select>
+	
+	<select id="allList" resultMap="QuestionDetail">
+		select * from question
+		join question_type using(questiontype_no)
+	</select>
+	
+	<select id="selectType" resultMap="QuestionDetail" parameterType="int">
+		select * from question
+		join question_type using(questiontype_no)
+		where questiontype_no = #{questiontype_no}
+		
+	</select>
+	
+	<select id="selectDetail" parameterType="int" resultMap="resultQuestion">
+		select * from question
+		where question_no = #{question_no}
+	</select>
+	
+	<select id="selectSearchUserid" parameterType="string" resultMap="resultQuestion">
+		select * from question 
+	    join question_type using(questiontype_no)
+		where user_id like '%' || #{ keyword } || '%'
+	</select>
+	
+	<insert id="insertMyQuestion" parameterType="Question">
+		insert into question
+		values((select nvl(max(question_no)+1,0) from question),#{question_title},#{question_content},null,
+		<if test="question_fimg == null">
+		null, null,
+		</if>
+		<if test="question_fimg != null">
+		#{question_fimg},#{question_rimg},
+		</if>
+		#{question_sendemail},#{user_id},#{questiontype_no})
+	</insert>
+	
+	<update id="updateQuestion" parameterType="Question">
+		update question set question_rcontent = #{question_rcontent}
+		where question_no = #{question_no}
+	</update>
+	
+</mapper>

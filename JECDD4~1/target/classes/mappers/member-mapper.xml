@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+
+	<resultMap id="resultMember" type="Member">
+		<id property="user_id" column="user_id" />
+		<result property="user_pwd" column="user_pwd" />
+		<result property="user_name" column="user_name" />
+		<result property="birthday" column="birthday" />
+		<result property="phone" column="phone" />
+		<result property="facebook_id" column="facebook_id" />
+		<result property="host_check" column="host_check" />
+		<result property="admin_check" column="admin_check" />
+	</resultMap>
+	
+	<resultMap id="resultList" type="Member">
+		<id property="user_id" column="user_id" />
+		<result property="user_pwd" column="user_pwd" />
+		<result property="user_name" column="user_name" />
+		<result property="birthday" column="birthday" />
+		<result property="phone" column="phone" />
+		<result property="facebook_id" column="facebook_id" />
+		<result property="host_check" column="host_check" />
+		<result property="admin_check" column="admin_check" />
+	</resultMap>
+	
+	<resultMap id="hostList" type="com.jeju.JejuBnB.member.model.vo.HostMemberRoomDetail">
+		<result property="room_no" column="room_no" />
+		<result property="user_id" column="user_id" />
+		<result property="user_name" column="user_name" />
+		<result property="room_name" column="room_name" />
+		<result property="room_address" column="room_address" />
+		<result property="phone" column="phone" />
+		<result property="host_check" column="host_check" />
+	</resultMap>
+
+	<resultMap id="incomeList" type="com.jeju.JejuBnB.member.model.vo.HostIncome">
+		<result property="room_no" column="room_no" />
+		<result property="room_name" column="room_name" />
+		<result property="guest_id" column="g" />
+		<result property="room_weekday" column="room_weekday" />
+		<result property="room_weekend" column="room_weekend" />
+		<result property="checkin_date" column="checkin_date" />
+		<result property="checkout_date" column="checkout_date" />
+		<result property="user_id" column="user_id" />
+		<result property="payment_status" column="payment_status" />
+		<result property="re_num" column="re_num" />
+		
+	</resultMap>
+	
+	<insert id="insertMember" parameterType="Member">
+		insert into member
+		values (#{ user_id },#{ user_pwd }, #{user_name}, #{birthday}, #{phone},
+	<if test="facebook_id != null">
+	 	#{facebook_id}, null, null) 
+	 </if>
+	 <if test="facebook_id == null">
+	  	null, null, null) 
+	  </if>
+	</insert>
+	
+	<select id="loginCheck" parameterType="Member"  resultType="Member">
+		select * from member 
+		where user_id = #{user_id}
+	</select>
+	
+	<select id="facebookLoginCheck" parameterType="Member"  resultType="Member">
+		select * from member 
+		where user_id = #{user_id}  
+	</select>
+	
+	<select id="selectMember" parameterType="string" resultType="Member">
+		select * from member where user_id = #{user_id}
+	</select>
+	
+	<select id="selectInfoCheck" parameterType="Member" resultType="int">
+		select count(user_id) from member where user_id = #{user_id} and birthday = #{birthday}
+	</select>
+	
+	<select id="selectMemberList" resultMap="resultList">
+		select * from member
+	</select>
+	
+	<select id="selectHostList" resultMap="resultList">
+		select user_id, user_name, phone, host_check from member join (select user_id from room where pass_or_not = 'N'
+		intersect select user_id from member where host_check is null) using (user_id)
+	</select>
+	
+	<select id="selectHostListDetail" resultMap="hostList">
+		select room_no, user_id, user_name, room_name, room_address, phone, host_check from member join room using(user_id) where user_id = #{user_id}
+	</select>
+	
+	<select id="selectIncomeHost" resultMap="incomeList">
+		select room_no, room_name, a.user_id g, room_weekday, room_weekend, checkin_date,
+		checkout_date, b.user_id , payment_status, re_num
+		from reservation a join room b using(room_no) where b.user_id = #{user_id}
+	</select>
+	
+	<update id="updatePwdMember" parameterType="Member">
+		update member set user_pwd = #{user_pwd} where user_id = #{user_id}
+	</update>
+	
+	<update id="updateMember" parameterType="Member">
+		update member set user_name = #{user_name}, birthday =#{birthday} , phone =#{phone}  where user_id = #{user_id}
+	</update>
+	
+	<update id="updateBeAdminMember" parameterType="string">
+		update member set admin_check = 'Y' where user_id = #{user_id}
+	</update>
+	
+	<update id="updateBeHostMember" parameterType="string">
+		update member set host_check = 'Y' where user_id = #{user_id}
+	</update>
+	
+	<update id="updatebeNotHostMember" parameterType="string">
+		update member set host_check = null where user_id = #{user_id}
+	</update>
+	
+	<delete id="deleteMember" parameterType="string">
+		delete from member where user_id = #{uid}
+	</delete> 
+	
+</mapper>

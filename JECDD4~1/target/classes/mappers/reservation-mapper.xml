@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reservationMapper">
+
+	 <resultMap id="resultReservation" type="Reservation" >
+		<id property="room_no" column="room_no" />
+		<result property="a_num" column="a_num" />
+		<result property="c_num" column="c_num" />
+		<result property="i_num" column="i_num" />
+		<result property="checkin_date" column="checkin_date" />
+		<result property="checkout_date" column="checkout_date" />
+		<result property="re_num" column="re_num" />
+		<result property="user_id" column="user_id" />
+		<result property="guest" column="guest" />
+		<result property="payment_status" column="payment_status" />
+	</resultMap>
+	
+	<resultMap id="reservMyCoupon" type="MyCoupon">
+		<result property="user_id" column="user_id" />
+		<result property="coupon_no" column="coupon_no" />
+		<result property="coupon_money" column="coupon_money" />	
+	</resultMap>
+	
+	<select id="selectCoupon" parameterType="String" resultMap="reservMyCoupon">
+		select * from my_coupon join coupon using(coupon_no) where user_id = #{user_id} 
+	</select>
+	
+	<select id="selectReserv" parameterType="int" resultMap="resultReservation">
+		select * from reservation where re_num = (select max(re_num) from reservation)
+	</select>
+	
+	<select id="selectReserv2" parameterType="int" resultMap="resultReservation">
+		select * from reservation where re_num = #{re_num}
+	</select>
+	
+	<select id="seleckCheck" parameterType="int" resultType="Reservation">
+		select * from reservation where max(re_num) = #{re_num}
+	</select>
+	
+	<insert id="insertReserv" parameterType="Reservation">
+		insert into reservation 
+		values (#{room_no}, #{a_num,jdbcType=INTEGER}, #{c_num,jdbcType=INTEGER}, #{i_num,jdbcType=INTEGER}, 
+				#{checkin_date}, #{checkout_date}, (select nvl(max(re_num),0) + 1 from reservation), 
+				#{user_id,jdbcType=VARCHAR}, #{guest,jdbcType=VARCHAR}, default)
+	</insert>
+	
+	<update id="updateReserv" parameterType="Reservation" >
+		update reservation set payment_status = 'Y' where re_num = #{re_num} 
+	</update>
+	
+	<update id="updateStateCoupon" parameterType="Reservation" >
+		update my_coupon set coupon_check = 'N' where user_id = #{user_id} 
+	</update>
+
+</mapper>
+
+
+
+
+
+

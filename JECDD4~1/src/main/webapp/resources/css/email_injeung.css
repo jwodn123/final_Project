@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+    .login,
+    .image {
+    min-height: 100vh;
+    }
+    .bg-image {
+    background-image: url('../images/31.jpg');
+    background-size: cover;
+    background-position: center center;
+    }
+    .logo img{
+      position: relative;
+      left : 6%;
+    }
+    .rounded-pill {
+      border-radius: 8px;
+    }
+    .em {
+      font-family: 'Roboto', sans-serif;
+      position: relative;
+      left: 4%;
+      top: -3%;
+    }
+    .check_btn {
+    background: #FFC19E;
+    color: white;
+    display: block;
+    width: 92.5%;
+    max-width: 680px;
+    height: 50px;
+    border-radius: 8px;
+    margin: 0 auto;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 15px 30px rgba(255, 193, 158, 0.36);
+    -webkit-transition: .2s linear;
+    transition: .2s linear;
+    }

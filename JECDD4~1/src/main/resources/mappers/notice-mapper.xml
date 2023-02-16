@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="noticeMapper">
+	<resultMap type="Notice" id="resultNotice">
+		<id column="notice_type_no" property="notice_type_no" />
+		<result property="notice_name" column="notice_name" />
+		<result property="notice_content1" column="notice_content1" />
+		<result property="notice_content2" column="notice_content2" />
+	</resultMap>	
+	
+	<resultMap type="User_Notice" id="resultUNotice">
+		<id property="notice_no" column="notice_no"/>
+		<result property="notice_content" column="notice_content" />	
+		<result property="notice_date" column="notice_date" />	
+		<result property="read_check" column="read_check" />	
+		<result property="to_user" column="to_user" />	
+		<result property="from_user" column="from_user" />	
+	</resultMap>
+	
+	
+	<select id="selectUserNotice" parameterType="string" resultMap="resultUNotice">
+		select * from user_notice where from_user = #{userid}
+	</select>
+	
+	<select id="selectNotice" parameterType="int" resultMap="resultNotice">
+		select * from notice where notice_type_no = #{choice}
+	</select>
+	
+	<select id="selectNoticeList" resultMap="resultNotice">
+		select * from notice
+	</select>
+	
+	<select id="selectUserNoticeList" resultMap="resultUNotice">
+		select * from user_notice
+	</select>
+	
+	<insert id="insertUserNotice" parameterType="User_Notice">
+		insert into user_notice values ((select max(notice_no) from user_notice) +1, #{notice_content}, sysdate, default, #{to_user}, #{from_user})
+	</insert>
+	
+	<delete id="deleteUserNotice" parameterType="int">
+		delete from user_notice where notice_no = #{noticeno}
+	</delete>
+	
+	<delete id="deleteNotice" parameterType="java.util.List" statementType="CALLABLE">
+		{
+		call
+		declare
+		begin
+		<foreach collection="list" item="noticeNo">
+			delete notice where notice_type_no = #{noticeNo};
+		</foreach>
+		end
+		}
+	</delete>
+</mapper>

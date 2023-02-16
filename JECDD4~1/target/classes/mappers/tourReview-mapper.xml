@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourReviewMapper">
+<resultMap type="tourReview" id="resultReview">
+	<id property="tour_review_no" column="tour_review_no" />
+	<result property="tour_review_content" column="tour_review_content"/>
+	<result property="tour_review_date" column="tour_review_date" />
+	<result property="tour_score" column="tour_score"/>
+	<result property="tour_no" column="tour_no" />
+	<result property="user_id" column="user_id" />
+</resultMap>
+
+<resultMap type="tourReview" id="resultList">
+    <id property="tour_review_no" column="tour_review_no" />
+	<result property="tour_review_content" column="tour_review_content"/>
+	<result property="tour_review_date" column="tour_review_date" />
+	<result property="tour_score" column="tour_score"/>
+	<result property="tour_no" column="tour_no" />
+	<result property="user_id" column="user_id" />
+</resultMap>
+
+<select id="selectReview" parameterType="com.jeju.JejuBnB.tourReview.model.vo.Tour_Review" resultMap="resultList">
+	select * 
+	from tour_review
+	where tour_no = #{ tour_no }
+</select>
+
+<select id="selectReviewList" parameterType="java.util.List" resultMap="resultList">
+	select
+</select>
+
+<insert id="insertReview" parameterType="tourReview">
+	insert into tour_review (tour_review_no, tour_review_comtent, tour_score, tour_no, user_id)
+	values((select max(reply_no) from review) + 1, #{ tour_review_content }, #{ tour_score }, #{ tour_no }, #{ user_id })
+</insert>
+
+<update id="updateReview" parameterType="tourReview">
+	update tour_review
+	set tour_review_content = #{ tour_review_content }, tour_score = #{ tour_score }
+</update>
+
+<delete id="deleteReview" parameterType="_int">
+	delete from tour_review
+	where tour_review_no = #{ tour_review_no }
+</delete>
+</mapper>

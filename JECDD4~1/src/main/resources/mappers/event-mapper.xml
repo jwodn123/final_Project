@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eventMapper">
+	<resultMap type="Event" id="resultEvent">
+		<id property="event_no" column="event_no" />
+		<result property="event_name" column="event_name" />	
+		<result property="event_content" column="event_content" />	
+		<result property="event_fimg" column="event_fimg" />	
+		<result property="event_rimg" column="event_rimg" />	
+		<result property="coupon_no" column="coupon_no" />	
+		<result property="sum_fimg" column="sum_fimg" />	
+		<result property="sum_rimg" column="sum_rimg" />	
+	</resultMap>
+	
+	
+	
+	<resultMap type="Event" id="resultList">
+		<id property="event_no" column="event_no" />
+		<result property="event_name" column="event_name" />	
+		<result property="event_content" column="event_content" />	
+		<result property="event_fimg" column="event_fimg" />	
+		<result property="event_rimg" column="event_rimg" />	
+		<result property="coupon_no" column="coupon_no" />	
+		<result property="sum_fimg" column="sum_fimg" />	
+		<result property="sum_rimg" column="sum_rimg" />	
+	</resultMap>
+	
+	<resultMap type="com.jeju.JejuBnB.event.model.vo.Collection" id="Collection">
+		<result property="coupon_no" column="coupon_no" />	
+		<result property="event_no" column="event_no" />
+		<result property="event_name" column="event_name" />	
+		<result property="event_content" column="event_content" />	
+		<result property="event_fimg" column="event_fimg" />	
+		<result property="event_rimg" column="event_rimg" />	
+		<result property="sum_fimg" column="sum_fimg" />	
+		<result property="sum_rimg" column="sum_rimg" />
+		<result property="coupon_money" column="coupon_money" />	
+		<result property="coupon_begin" column="coupon_begin" />	
+		<result property="coupon_end" column="coupon_end" />	
+	</resultMap>
+	
+	
+
+	
+	
+	<select id="selectList" resultMap="Collection">
+		select * from event
+		join coupon using(coupon_no)
+	</select>
+	
+	<select id="selectEvent" parameterType="int" resultMap="Collection">
+	select * from event join coupon using(coupon_no)
+	where event_no = #{event_no}
+	</select>
+	
+	<select id="getListCount" resultType="_int">
+		select count(event_no) from event
+	</select>
+	
+	<insert id="insertEvent" parameterType="Event">
+		insert into event
+		values((select nvl(max(event_no)+1,1) from event),#{event_name},#{event_content},
+		
+		<if test="event_fimg == null">
+		null, null,
+		</if>
+		
+		<if test="event_fimg != null">
+		#{event_fimg},#{event_rimg},
+		</if>
+		#{coupon_no},		
+		<if test="sum_fimg == null">
+		null, null,
+		</if>
+		<if test="sum_fimg != null">
+		#{sum_fimg}, #{sum_rimg}
+		</if>
+		)
+		
+	</insert>
+	
+	<update id="updateEvent" parameterType="Event">
+		update event set event_name = #{event_name}, event_content = #{event_content},
+		
+		<if test="event_fimg != null">
+		event_fimg = #{event_fimg}, event_rimg = #{event_rimg},
+		</if>
+				
+		<if test="sum_fimg != null">
+		sum_fimg = #{sum_fimg}, sum_rimg = #{sum_rimg},
+		</if>
+		
+		coupon_no = #{coupon_no}
+		where event_no = #{event_no}
+	</update>
+	
+	<delete id="deleteEvent" parameterType="string">
+	delete from event where event_no = #{event_no}
+	</delete> 
+</mapper>

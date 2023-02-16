@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewMapper">
+<resultMap type="Review" id="resultReview">
+		<id property="reply_no" column="reply_no" />
+		<result property="clean_score" column="clean_score" />	
+		<result property="value_score" column="value_score" />	
+		<result property="service_score" column="service_score" />	
+		<result property="review_content" column="review_content" />
+		<result property="review_level" column="review_level" />
+		<result property="review_ref" column="review_ref" />
+		<result property="review_seq" column="review_seq" />
+		<result property="room_no" column="room_no" />
+		<result property="user_id" column="user_id" />
+		<result property="review_date" column="review_date" />
+</resultMap>
+
+<resultMap type="Review" id="resultList">
+		<id property="reply_no" column="reply_no" />
+		<result property="clean_score" column="clean_score" />	
+		<result property="value_score" column="value_score" />	
+		<result property="service_score" column="service_score" />	
+		<result property="review_content" column="review_content" />
+		<result property="review_level" column="review_level" />
+		<result property="review_ref" column="review_ref" />
+		<result property="review_seq" column="review_seq" />
+		<result property="room_no" column="room_no" />
+		<result property="user_id" column="user_id" />
+		<result property="review_date" column="review_date" />
+</resultMap>
+
+<select id="selectReply" parameterType="com.jeju.JejuBnB.review.model.vo.Review" resultMap="resultList">
+	select * from review where room_no = #{ room_no } order by review_date desc
+</select>
+
+<select id="selectOne" parameterType="int" resultMap="resultReview">
+	select * from review where reply_no = #{ reply_no }
+</select>
+
+<select id="selectReviewList" parameterType="java.util.List" resultMap="resultList">
+   select round(avg(clean_score),2) clean_score, round(avg(value_score),2) value_score, round(avg(service_score),2) service_score, count(reply_no) reply_no, room_no from review where room_no = 0 group by room_no
+   <foreach collection="list" item="room">
+      union select round(avg(clean_score),2) clean_score, round(avg(value_score),2) value_score, round(avg(service_score),2) service_score, count(reply_no) reply_no, room_no from review where room_no = #{room.room_no} group by room_no
+   </foreach>
+</select>
+
+<select id="selectReviewAvg" parameterType="int" resultMap="resultReview">
+	select round(avg(clean_score),1) clean_score, round(avg(value_score),1) value_score, round(avg(service_score),1) service_score, count(reply_no) reply_no, room_no from review where room_no = #{room_no} group by room_no
+</select>
+
+<insert id="insertReview" parameterType="Review">
+	insert into review (reply_no, clean_score, value_score, service_score, review_content, room_no, user_id)
+	values((select nvl(max(reply_no),0) from review) + 1, #{clean_score}, #{value_score}, #{service_score }, 
+	#{review_content}, #{room_no}, #{user_id} )
+</insert>	
+
+<update id="updateReview" parameterType="Review">
+	update review set clean_score = #{clean_score}, value_score = #{value_score}, service_score = #{service_score},
+					  review_content = #{review_content} where reply_no = #{reply_no}
+</update>
+
+<update id="updateAvg" parameterType="Review">
+	update review set clean_score = #{clean_score}, value_score = #{value_score}, service_score = #{service_score})
+</update>
+
+<delete id="deleteReview" parameterType="int">
+	delete from review where reply_no = #{ reply_no }
+</delete>
+
+<delete id="deleteReviewList" parameterType="int">
+	delete from from review where room_no = #{room_no}
+</delete>
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="messageMapper">
+
+	<resultMap id="resultMessage" type="Message">
+		<id property="message_no" column="message_no" />
+		<result property="user_one" column="user_one" />
+		<result property="user_two" column="user_two" />
+	</resultMap>
+	
+	<resultMap id="resultList" type="Message">
+		<id property="message_no" column="message_no" />
+		<result property="user_one" column="user_one" />
+		<result property="user_two" column="user_two" />
+	</resultMap>
+	
+	<insert id="insertMessage" parameterType="Message">
+		insert into message (message_no, user_one, user_two)
+		values ((select nvl(max(message_no)+1,0) from message) ,#{ user_one }, #{user_two})
+	</insert>
+	
+	<select id="selectListMessage" parameterType="Message"  resultType="Message">
+		select * from message 
+		where (user_one = #{user_one} and user_two = #{user_two}) or (user_one = #{user_two} and user_two = #{user_one})
+	</select>
+	
+	<select id="selectMessageList" parameterType="Message"  resultMap="resultList">
+		select * from message
+		where user_one = #{user_one} or user_two = #{user_one}
+	</select>
+	
+</mapper>

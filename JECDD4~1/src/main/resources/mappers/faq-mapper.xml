@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="faqMapper">
+	<resultMap type="Faq" id="resultFaq">
+		<id property="faq_no" column="faq_no" />
+		<result property="faq_title" column="faq_title" />	
+		<result property="faq_rcontent" column="faq_rcontent" />
+		<result property="faq_readcount" column="faq_readcount"/>
+		<result property="faqcategory_no" column="faqcategory_no" />	
+	</resultMap>
+	
+	<resultMap type="FaqPlus" id="resultFaqPlus">
+		<result property="faq_no" column="faq_no" />
+		<result property="faq_title" column="faq_title" />	
+		<result property="faq_rcontent" column="faq_rcontent" />	
+		<result property="faq_readcount" column="faq_readcount"/>
+		<result property="faqcategory_no" column="faqcategory_no" />
+		<result property="faqcategory_name" column="faqcategory_name" />
+	</resultMap>
+	
+	
+	<select id="selectList" resultMap="resultFaqPlus">
+		select * from faq
+		join faq_type using(faqcategory_no)
+	</select>
+	
+	<select id="Top7List" resultMap="resultFaqPlus">
+		<![CDATA[
+		SELECT * FROM (SELECT ROWNUM RNUM, faq_no, faq_title, faq_readcount, faq_rcontent FROM (SELECT * FROM faq ORDER BY faq_readcount DESC)) WHERE RNUM >= 1 AND RNUM <= 7 
+		]]>
+	</select>
+	
+	<insert id="insertFaq" parameterType="Faq">
+		insert into faq
+		values((select nvl(max(faq_no)+1,1) from faq),#{faq_title},#{faq_rcontent},0,#{faqcategory_no})
+	</insert>
+	
+	<delete id="deleteFaq" parameterType="string">
+		delete from faq where faq_no = #{faq_no}
+	</delete>
+	
+	<update id="updateCount" parameterType="Faq">
+		update faq set faq_readcount = (select faq_readcount from faq where faq_no= #{faq_no} ) + 1 where faq_no= #{faq_no}
+	</update>
+</mapper>

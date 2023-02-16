@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mycouponMapper">
+
+	<resultMap id="resultList" type="MyCoupon">
+		<result property="user_id" column="user_id" />
+		<result property="coupon_no" column="coupon_no" />
+		<result property="coupon_money" column="coupon_money" />	
+		<result property="coupon_begin" column="coupon_begin" />	
+		<result property="coupon_end" column="coupon_end" />
+		
+	</resultMap>
+	
+	<resultMap type="MyCoupon" id="MyCoupon">
+		<result property="coupon_no" column="coupon_no" />
+		<result property="user_id" column="user_id" />
+	</resultMap>
+	
+	<select id="selectList" resultType="MyCoupon" parameterType="MyCoupon">
+		select * from my_coupon 
+		 where coupon_no= #{coupon_no} and user_id = #{user_id}
+	</select>
+	
+	<insert id="insertMyCoupon" parameterType="MyCoupon">
+		insert into my_coupon
+		values(#{coupon_no},#{user_id})
+	</insert>
+	
+	<select id="selectMyCouponList" resultMap="resultList" parameterType="MyCoupon">
+		select * from my_coupon join coupon using(coupon_no)
+		 where user_id = #{user_id}
+	</select>
+   		
+	
+</mapper>

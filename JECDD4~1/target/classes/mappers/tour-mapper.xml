@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tourMapper">
+	<resultMap id="resultTour" type="Tour">
+		<id column="tour_no" property="tour_no" />
+		<result column="tour_category_no" property="tour_category_no" />
+		<result column="tour_name" property="tour_name" />
+		<result column="tour_act_start_date" property="tour_act_start_date" />
+		<result column="tour_act_end_date" property="tour_act_end_date" />
+		<result column="tour_content" property="tour_content" />
+		<result column="tour_roadaddress" property="tour_roadaddress" />
+		<result column="tour_moreinfo" property="tour_moreinfo" />
+		<result column="tour_thum_image" property="tour_thum_image" />
+		<result column="tour_readcount" property="tour_readcount" />
+		<result column="user_id" property="user_id" />
+	</resultMap>
+	
+	<resultMap id="resultList" type="Tour">
+		<id column="tour_no" property="tour_no" />
+		<result column="tour_category_no" property="tour_category_no" />
+		<result column="tour_name" property="tour_name" />
+		<result column="tour_act_start_date" property="tour_act_start_date" />
+		<result column="tour_act_end_date" property="tour_act_end_date" />
+		<result column="tour_content" property="tour_content" /> 
+		<result column="tour_roadaddress" property="tour_roadaddress" />
+		<result column="tour_moreinfo" property="tour_moreinfo" />
+		<result column="tour_thum_image" property="tour_thum_image" />
+		<result column="tour_readcount" property="tour_readcount" />
+		<result column="user_id" property="user_id" />
+	</resultMap>
+	
+	<resultMap id="resultTiList" type="Tour_Image">
+		<id property="tour_image_no" column="tour_image_no" />
+		<result property="tour_original_file" column="tour_original_file" />
+		<result property="tour_rename_file" column="tour_rename_file" />
+		<result property="tour_no" column="tour_no" />
+	</resultMap>
+	
+	<resultMap id="resultTourNo" type="Tour">
+		<id property="tour_no" column="tour_no" />
+	</resultMap>
+	
+	<resultMap id="resultToCategory" type="Tour_Category">
+		<id property="tour_category_no" column="tour_category_no" />
+		<result property="tour_category_name" column="tour_category_name"/>
+	</resultMap>
+	
+	<resultMap id="resultToLike" type="Tour_Like">
+		<id property="tour_no" column="tour_no" />
+		<result property="user_id" column="user_id" />
+		<result property="count" column="count" />
+	</resultMap>
+	
+	<select id="selectTour" parameterType="com.jeju.JejuBnB.tour.model.vo.TourPage" resultMap="resultList">
+		<![CDATA[
+		select * 
+		from(select rownum rnum, tour_no, tour_category_no, tour_name, tour_act_start_date, tour_act_end_date, tour_content, tour_roadaddress,
+		            tour_moreinfo, tour_thum_image, tour_readcount, user_id 
+		            from (select * from tour order by tour_no))
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		]]>
+	</select>
+	
+	<select id="selectTourDetail" parameterType="_int" resultMap="resultTour">
+		select *
+		from tour
+		where tour_no = #{ tour_no }
+	</select>
+	
+	<select id="selectTourCategory" parameterType="_int" resultMap="resultToCategory">
+		select * from tour_category
+		where tour_category_no = #{ tour_category_no }
+	</select>
+	
+	<select id="selectTourImage" parameterType="_int" resultMap="resultTiList">
+		select * from tour_image
+		where tour_image_no = #{ touno }
+	</select>
+	
+	<select id="selectTourNo" parameterType="String" resultType="_int">
+		select * from ( select rownum rum, tour_no from
+						where user_id = #{ user_id } order by tour_no desc) where rnum = 1
+	</select>
+	
+	<select id="selectTourScore">
+		select tour_score
+		from tour_review
+		where tour_no = #{ tour_no }
+	</select> 
+	
+	<select id="selectTourCategoryName" parameterType="com.jeju.JejuBnB.tour.model.vo.Tour_Category" resultMap="resultToCategory">
+		select tour_category_name
+		from tour_category
+	</select>
+	
+	<insert id="insertTour" parameterType="Tour">
+		insert into tour
+		values((select nvl(max(tour_no),0) from tour) + 1, #{ tour_category_no } , #{ tour_name }, #{ tour_act_start_date }, #{ tour_act_end_date },  #{ tour_content }, #{ tour_roadaddress },
+		#{ tour_moreinfo } , #{ tour_thum_image }, default,#{ user_id })
+	</insert>
+	
+	<insert id="insertTourImage" parameterType="Tour_Image" >
+		insert into tour_image values ((select max(tour_image_no) from tour_image ) + 1, #{ tour_original_file }, #{ tour_rename_file }, #{ tour_no } )
+	</insert>
+	
+	<update id="updateTour" parameterType="Tour">
+		update tour 
+		set tour_name = #{ tour_name }, tour_act_start_date = #{ tour_act_start_date },
+				      tour_act_end_date = #{ tour_act_end_date },  tour_content = #{ tour_content }, tour_roadaddress = #{ tour.roadaddress },
+				       #{ tour_moreinfo }
+	    where tour_no = #{ tour_no }
+	</update>
+	
+	<update id="updateTourReadCount" parameterType="_int" >
+		update tour
+		set tour_readcount = tour_readcount + 1
+		where tour_no = #{ tour_no }
+	</update> 
+
+	<delete id="deleteTour" parameterType="_int" >
+		delete from tour where tour_no = #{ tour_no }
+	</delete>
+</mapper>

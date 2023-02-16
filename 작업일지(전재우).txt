@@ -1,0 +1,15 @@
+2020/09/08
+reservationDao, Controller, Service, ServiceImpl, mapper 수정
+reservationListView.jsp (css & 이미지 슬라이드 작업)
+
+2020/09/09
+reservationListView.jsp(css & 체크인&체크아웃&인원선택 창 작업)
+(*인원선택 기능 미완료)
+
+2020/09/10
+reservationListView.jsp(css & 체크인&체크아웃&인원선택 기능 80%)
+
+2020/09/11
+reservationListView.jsp(css & 체크인&체크아웃&인원선택 기능 완료)
+reservationDetailView.jsp(ListView에서 이동처리)
+

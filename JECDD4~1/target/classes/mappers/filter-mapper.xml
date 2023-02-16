@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="filterMapper">
+ 	<resultMap id="resultAmenity" type="Amenity">
+		<id property="amenity_no" column="amenity_no" />
+		<result property="amenity_name" column="amenity_name" />
+	</resultMap>
+	
+	<resultMap id="resultBuild_Type" type="Build_Type">
+		<id property="bu_type_no" column="bu_type_no" />
+		<result property="bu_type_name" column="bu_type_name" />
+	</resultMap>
+	
+	<resultMap id="resultFacility" type="Facility">
+		<id property="facility_no" column="facility_no" />
+		<result property="facility_name" column="facility_name" />
+	</resultMap>
+	
+	<resultMap id="resultRule" type="Rule">
+		<id property="rule_no" column="rule_no" />
+		<result property="rule_name" column="rule_name" />
+	</resultMap>
+	
+	<select id="selectAmenity" resultMap="resultAmenity">
+		select * from amenity order by amenity_no
+	</select>
+	
+	<select id="selectBuT" resultMap="resultBuild_Type">
+		select * from Build_Type order by bu_type_no
+	</select>
+	
+	<select id="selectFacility" resultMap="resultFacility">
+		select * from Facility order by facility_no
+	</select>
+	
+	<select id="selectRule" resultMap="resultRule">
+		select * from Rule order by rule_no
+	</select>
+	
+	<insert id="insertAmenity" parameterType="string">
+		insert into amenity values((select nvl(max(amenity_no),0) + 1 from amenity), #{amenity_name})
+	</insert>
+	
+	<insert id="insertFacility" parameterType="Facility">
+		insert into facility values((select nvl(max(facility_no),0) + 1 from facility) + 1, #{facility_name})
+	</insert>
+	
+	<insert id="insertBut" parameterType="Build_Type">
+		insert into build_type values((select nvl(max(bu_type_no),0) + 1 from build_type) + 1, #{bu_type_name})
+	</insert>
+	
+	<insert id="insertRule" parameterType="Rule">
+		insert into Rule values((select nvl(max(rule_no),0) + 1 from Rule) + 1, #{rule_name})
+	</insert>
+	
+	<delete id="deleteAmenity" parameterType="int">
+		delete from amenity where amenity_no = #{amenity_no}
+	</delete>
+	
+	<delete id="deleteFacility" parameterType="int">
+		delete from facility where facility_no = #{facility_no}
+	</delete>
+	
+	<delete id="deleteBuildType" parameterType="int">
+		delete from build_type where bu_type_no = #{bu_type_no}
+	</delete>
+	
+	<delete id="deleteRule" parameterType="int">
+		delete from rule where rule_no = #{rule_no}
+	</delete>
+</mapper>

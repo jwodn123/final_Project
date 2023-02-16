@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC
+"-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <typeAliases>
+      <typeAlias type="com.jeju.JejuBnB.member.model.vo.Member" alias="Member" />      
+      <typeAlias type="com.jeju.JejuBnB.room.model.vo.Room" alias="Room" />
+      <typeAlias type="com.jeju.JejuBnB.room.model.vo.Room_File" alias="Room_File" />
+      <typeAlias type="com.jeju.JejuBnB.room.model.vo.RoomLatLng" alias="RoomLatLng" />
+      <typeAlias type="com.jeju.JejuBnB.room.model.vo.RoomFilter" alias="RoomFilter" />      
+      <typeAlias type="com.jeju.JejuBnB.tour.model.vo.Tour" alias="Tour" />
+      <typeAlias type="com.jeju.JejuBnB.tour.model.vo.Tour_Image" alias="Tour_Image" />
+      <typeAlias type="com.jeju.JejuBnB.tour.model.vo.Tour_Category" alias="Tour_Category" />
+      <typeAlias type="com.jeju.JejuBnB.tourReview.model.vo.Tour_Review" alias="tourReview" />
+      <typeAlias type="com.jeju.JejuBnB.tour.model.vo.Tour_Like" alias="Tour_Like" />      
+      <typeAlias type="com.jeju.JejuBnB.coupon.model.vo.Coupon" alias="Coupon"/>      
+      <typeAlias type="com.jeju.JejuBnB.event.model.vo.Event" alias="Event"/>      
+      <typeAlias type="com.jeju.JejuBnB.faq.model.vo.Faq" alias="Faq"/>
+      <typeAlias alias="FaqPlus" type="com.jeju.JejuBnB.faq.model.vo.FaqPlus"/>      
+      <typeAlias type="com.jeju.JejuBnB.policy.model.vo.Policy" alias="Policy"/>      
+      <typeAlias type="com.jeju.JejuBnB.question.model.vo.Question" alias="Question"/>      
+      <typeAlias type="com.jeju.JejuBnB.reservation.model.vo.Reservation" alias="Reservation" />      
+      <typeAlias type="com.jeju.JejuBnB.review.model.vo.Review" alias="Review" />      
+      <typeAlias type="com.jeju.JejuBnB.filter.model.vo.Amenity" alias="Amenity" />
+      <typeAlias type="com.jeju.JejuBnB.filter.model.vo.Build_type" alias="Build_type" />
+      <typeAlias type="com.jeju.JejuBnB.filter.model.vo.Facility" alias="Facility" />
+      <typeAlias type="com.jeju.JejuBnB.filter.model.vo.Rule" alias="Rule" />      
+      <typeAlias type="com.jeju.JejuBnB.notice.model.vo.User_Notice" alias="User_Notice" />
+      <typeAlias type="com.jeju.JejuBnB.notice.model.vo.Notice" alias="Notice" />      
+      <typeAlias type="com.jeju.JejuBnB.message.model.vo.Message_Detail" alias="Message_Detail" />      
+      <typeAlias type="com.jeju.JejuBnB.message.model.vo.Message" alias="Message" />      
+      <typeAlias type="com.jeju.JejuBnB.mycoupon.model.vo.MyCoupon" alias="MyCoupon" />
+      <typeAlias type="com.jeju.JejuBnB.myroom.model.vo.MyRoom" alias="MyRoom" />
+      <typeAlias type="com.jeju.JejuBnB.account.model.vo.Account" alias="Account" />
+   </typeAliases>
+
+   <mappers>
+      <mapper resource="mappers/member-mapper.xml" />
+      <mapper resource="mappers/room-mapper.xml" />
+      <mapper resource="mappers/tour-mapper.xml" />
+      <mapper resource="mappers/coupon-mapper.xml"/>
+      <mapper resource="mappers/event-mapper.xml"/>
+      <mapper resource="mappers/faq-mapper.xml"/>
+      <mapper resource="mappers/policy-mapper.xml"/>
+      <mapper resource="mappers/question-mapper.xml"/>
+      <mapper resource="mappers/reservation-mapper.xml" />
+      <mapper resource="mappers/filter-mapper.xml" />
+      <mapper resource="mappers/notice-mapper.xml" />
+      <mapper resource="mappers/message_detail-mapper.xml" />
+      <mapper resource="mappers/message-mapper.xml" />
+      <mapper resource="mappers/mycoupon-mapper.xml" />
+      <mapper resource="mappers/myroom-mapper.xml" />
+      <mapper resource="mappers/review-mapper.xml" />
+      <mapper resource="mappers/tourReview-mapper.xml" />
+      <mapper resource="mappers/account-mapper.xml" />
+   </mappers>
+</configuration>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountMapper">
+<resultMap type="Account" id="resultAccount">
+		<id property="room_no" column="room_no" />
+		<result property="account_num" column="account_num" />	
+		<result property="bank_name" column="bank_name" />
+</resultMap>
+
+<select id="selectOne" parameterType="int" resultMap="resultAccount">
+	select * from account where room_no = #{room_no}
+</select>
+
+<insert id="insertAcc" parameterType="Account">
+	insert into account
+	values((select nvl(max(account_num),0) from account) + 1, #{bank_name}, #{room_no})
+</insert>
+
+</mapper>
